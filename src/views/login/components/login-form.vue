@@ -11,14 +11,14 @@
       @submit="handleSubmit"
     >
       <a-form-item
-        field="username"
-        :rules="[{ required: true, message: $t('login.form.userName.errMsg') }]"
+        field="userAccount"
+        :rules="[{ required: true, message: $t('login.form.userAccount.errMsg') }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
         <a-input
-          v-model="userInfo.username"
-          :placeholder="$t('login.form.userName.placeholder')"
+          v-model="userInfo.userAccount"
+          :placeholder="$t('login.form.userAccount.placeholder')"
         >
           <template #prefix>
             <icon-user />
@@ -26,14 +26,14 @@
         </a-input>
       </a-form-item>
       <a-form-item
-        field="password"
-        :rules="[{ required: true, message: $t('login.form.password.errMsg') }]"
+        field="userPassword"
+        :rules="[{ required: true, message: $t('login.form.userPassword.errMsg') }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
         <a-input-password
-          v-model="userInfo.password"
-          :placeholder="$t('login.form.password.placeholder')"
+          v-model="userInfo.userPassword"
+          :placeholder="$t('login.form.userPassword.placeholder')"
           allow-clear
         >
           <template #prefix>
@@ -82,12 +82,12 @@
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
-    username: 'admin', // 演示默认值
-    password: 'admin', // demo default value
+    userAccount: 'admin', // 默认值
+    userPassword: 'admin', // demo default value
   });
   const userInfo = reactive({
-    username: loginConfig.value.username,
-    password: loginConfig.value.password,
+    userAccount: loginConfig.value.userAccount,
+    userPassword: loginConfig.value.userPassword,
   });
 
   const handleSubmit = async ({
@@ -111,11 +111,11 @@
         });
         Message.success(t('login.form.login.success'));
         const { rememberPassword } = loginConfig.value;
-        const { username, password } = values;
+        const { userAccount, userPassword } = values;
         // 实际生产环境需要进行加密存储。
         // The actual production environment requires encrypted storage.
-        loginConfig.value.username = rememberPassword ? username : '';
-        loginConfig.value.password = rememberPassword ? password : '';
+        loginConfig.value.userAccount = rememberPassword ? userAccount : '';
+        loginConfig.value.userPassword = rememberPassword ? userPassword : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
       } finally {
