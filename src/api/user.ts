@@ -10,6 +10,10 @@ export interface LoginData {
 export interface LoginRes {
   id: string;
 }
+
+export interface token {
+  token: string;
+}
 export function login(data: LoginData) {
   return axios.post<LoginRes>('/sysuser/login', data);
 }
@@ -18,41 +22,10 @@ export function logout() {
   return axios.post<LoginRes>('/sysuser/logout');
 }
 
-export function getUserInfo() {
-  return axios.get<UserState>('/sysuser/get/login');
+export function getUserInfo(data: any) {
+  return axios.post<UserState>('/sysuser/get/login', data);
 }
 
 export function getMenuList() {
-  // return axios.post<RouteRecordNormalized[]>('/api/sysmenu/showSysMenu');
-  const menuList = [
-    {
-      path: '/dashboard',
-      name: 'dashboard',
-      meta: {
-        locale: 'menu.server.dashboard',
-        requiresAuth: true,
-        icon: 'icon-dashboard',
-        order: 1,
-      },
-      children: [
-        {
-          path: 'workplace',
-          name: 'Workplace',
-          meta: {
-            locale: 'menu.server.workplace',
-            requiresAuth: true,
-          },
-        },
-        {
-          path: 'https://arco.design',
-          name: 'arcoWebsite',
-          meta: {
-            locale: 'menu.arcoWebsite',
-            requiresAuth: true,
-          },
-        },
-      ],
-    },
-  ];
-  return menuList;
+  return axios.post<RouteRecordNormalized[]>('/api/sysmenu/showSysMenu');
 }

@@ -8,6 +8,7 @@ import { MockParams } from '@/types/mock';
 import { isLogin } from '@/utils/auth';
 
 setupMock({
+  mock: false,
   setup() {
     // Mock.XHR.prototype.withCredentials = true;
 
@@ -69,6 +70,7 @@ setupMock({
 
     // 用户的服务端菜单
     Mock.mock(new RegExp('/api/user/menu'), () => {
+      console.log(123546897);
       const menuList = [
         {
           path: '/dashboard',

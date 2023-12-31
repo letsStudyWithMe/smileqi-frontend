@@ -50,14 +50,14 @@
           >
             {{ $t('login.form.rememberPassword') }}
           </a-checkbox>
-          <a-link>{{ $t('login.form.forgetPassword') }}</a-link>
+          <!--          <a-link>{{ $t('login.form.forgetPassword') }}</a-link>-->
         </div>
         <a-button type="primary" html-type="submit" long :loading="loading">
           {{ $t('login.form.login') }}
         </a-button>
-        <a-button type="text" long class="login-form-register-btn">
+        <!--        <a-button type="text" long class="login-form-register-btn">
           {{ $t('login.form.register') }}
-        </a-button>
+        </a-button>-->
       </a-space>
     </a-form>
   </div>
@@ -87,7 +87,7 @@
   });
   const userInfo = reactive({
     userAccount: loginConfig.value.userAccount,
-    userPassword: loginConfig.value.userPassword,
+    userPassword: window.atob(loginConfig.value.userPassword),
   });
 
   const handleSubmit = async ({
@@ -115,7 +115,9 @@
         // 实际生产环境需要进行加密存储。
         // The actual production environment requires encrypted storage.
         loginConfig.value.userAccount = rememberPassword ? userAccount : '';
-        loginConfig.value.userPassword = rememberPassword ? userPassword : '';
+        loginConfig.value.userPassword = rememberPassword
+          ? window.btoa(userPassword)
+          : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
       } finally {
