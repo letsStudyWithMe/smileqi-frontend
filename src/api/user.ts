@@ -27,5 +27,5 @@ export function getUserInfo(data: any) {
 }
 
 export function getMenuList() {
-  return axios.post<RouteRecordNormalized[]>('/api/sysmenu/showSysMenu');
+  return axios.get<RouteRecordNormalized[]>('/sysmenu/showSysMenu');
 }
