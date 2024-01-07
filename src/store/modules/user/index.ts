@@ -13,20 +13,9 @@ const useUserStore = defineStore('user', {
   state: (): UserState => ({
     userName: undefined,
     userAvatar: undefined,
-    userRole: 'admin',
+    userRole: 'user',
     userAccount: undefined,
-    // location: undefined,
-    // email: undefined,
-    // introduction: undefined,
-    // personalWebsite: undefined,
-    // jobName: undefined,
-    // organizationName: undefined,
-    // locationName: undefined,
-    // phone: undefined,
-    // registrationDate: undefined,
-    // accountId: undefined,
-    // certification: undefined,
-    // role: '',
+    token: '',
   }),
 
   getters: {
@@ -54,8 +43,7 @@ const useUserStore = defineStore('user', {
 
     // Get user's information
     async info() {
-      const token = getToken();
-      const res = await getUserInfo(token);
+      const res = await getUserInfo();
       this.setInfo(res.data);
     },
 
@@ -63,7 +51,13 @@ const useUserStore = defineStore('user', {
     async login(loginForm: LoginData) {
       try {
         const res = await userLogin(loginForm);
+        // 存token
         setToken(res.data.token);
+        this.userName = res.data.userName
+        this.userAccount = res.data.userAccount
+        this.userRole = res.data.userRole
+        this.token = res.data.token
+        this.userAvatar = res.data.userAvatar
       } catch (err) {
         clearToken();
         throw err;

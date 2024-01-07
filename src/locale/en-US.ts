@@ -24,6 +24,8 @@ export default {
   'menu.sys.management': 'System Management',
   'menu.sys.menu': 'Menu Management',
   'menu.sys.user': 'User Management',
+  'menu.user.setting': 'User Setting',
+  'menu.user.central': 'User Central',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,

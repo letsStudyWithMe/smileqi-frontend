@@ -24,6 +24,8 @@ export default {
   'menu.sys.management': '系统管理',
   'menu.sys.menu': '菜单管理',
   'menu.sys.user': '用户管理',
+  'menu.user.setting': '个人管理',
+  'menu.user.central': '个人中心',
   ...localeSettings,
   ...localeMessageBox,
   ...localeLogin,

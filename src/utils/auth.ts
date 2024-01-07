@@ -8,7 +8,7 @@ const getToken = () => {
   return localStorage.getItem(TOKEN_KEY);
 };
 
-const setToken = (token: string) => {
+const setToken = (token: any) => {
   localStorage.setItem(TOKEN_KEY, token);
 };
 

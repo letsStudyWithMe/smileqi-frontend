@@ -10,7 +10,7 @@
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          Arco Pro
+          Smile Qi
         </a-typography-title>
         <icon-menu-fold
           v-if="!topMenu && appStore.device === 'mobile'"
@@ -146,11 +146,8 @@
 <!--      </li>-->
       <li>
         <a-dropdown trigger="click">
-          <a-avatar
-            :size="32"
-            :style="{ marginRight: '8px', cursor: 'pointer' }"
-          >
-            <img alt="avatar" :src="avatar" />
+          <a-avatar :style="{ backgroundColor: '#3370ff' }">
+            <IconUser />
           </a-avatar>
           <template #content>
 <!--            <a-doption>-->
@@ -209,9 +206,6 @@
   const { changeLocale, currentLocale } = useLocale();
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const locales = [...LOCALE_OPTIONS];
-  const avatar = computed(() => {
-    return userStore.userAvatar;
-  });
   const theme = computed(() => {
     return appStore.theme;
   });

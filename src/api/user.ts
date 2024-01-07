@@ -1,6 +1,6 @@
 import axios from 'axios';
 import type { RouteRecordNormalized } from 'vue-router';
-import { UserState } from '@/store/modules/user/types';
+import { RoleType, UserState } from "@/store/modules/user/types";
 import { getToken } from "@/utils/auth";
 
 export interface LoginData {
@@ -8,25 +8,52 @@ export interface LoginData {
   userPassword: string;
 }
 
-export interface LoginRes {
-  token: string;
-}
-
 export interface token {
   token: string;
 }
+
+export interface User {
+  id: number;
+  userAccount: string;
+  userPassword: string;
+  userName: string;
+  userAvatar: string;
+  userRole: string;
+  createdTime: string;
+  isDelete: boolean;
+}
+
+export interface UserParams extends Partial<User> {
+  current: number;
+  pageSize: number;
+}
+
+export interface UserListRes {
+  list: User[];
+  total: number;
+}
+
 export function login(data: LoginData) {
-  return axios.post<LoginRes>('/sysuser/login', data);
+  return axios.post<UserState>('/sysuser/login', data);
 }
 
-export function logout() {
-  return axios.post<LoginRes>('/sysuser/logout');
-}
-
-export function getUserInfo(data: any) {
-  return axios.post<UserState>('/sysuser/get/login', data);
+export function getUserInfo() {
+  return axios.post<UserState>('/sysuser/get/login');
 }
 
 export function getMenuList() {
   return axios.get<RouteRecordNormalized[]>('/sysmenu/showSysMenu');
+}
+
+// export function queryUserList(params: UserParams) {
+//   return axios.get<UserListRes>('/list/policy', {
+//     params,
+//     paramsSerializer: (obj) => {
+//       return qs.stringify(obj);
+//     },
+//   });
+// }
+
+export function queryUserList(params: UserParams) {
+  return axios.post<UserListRes>('/sysuser/list/page', params);
 }
