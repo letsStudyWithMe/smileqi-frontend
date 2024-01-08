@@ -4,5 +4,4 @@ export interface UserState {
   userAvatar?: string;
   userName?: string;
   userRole: RoleType;
-  token?: string;
 }

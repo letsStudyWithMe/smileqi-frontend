@@ -12,6 +12,10 @@ export interface token {
   token: string;
 }
 
+export interface LoginRes {
+  token: string;
+}
+
 export interface User {
   id: number;
   userAccount: string;
@@ -29,16 +33,16 @@ export interface UserParams extends Partial<User> {
 }
 
 export interface UserListRes {
-  list: User[];
+  records: User[];
   total: number;
 }
 
 export function login(data: LoginData) {
-  return axios.post<UserState>('/sysuser/login', data);
+  return axios.post<LoginRes>('/sysuser/login', data);
 }
 
 export function getUserInfo() {
-  return axios.post<UserState>('/sysuser/get/login');
+  return axios.get<UserState>('/sysuser/get/login');
 }
 
 export function getMenuList() {

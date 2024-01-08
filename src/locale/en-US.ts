@@ -1,6 +1,6 @@
 import localeMessageBox from '@/components/message-box/locale/en-US';
 import localeLogin from '@/views/login/locale/en-US';
-
+import localeUser from '@/views/sysmanagement/sysuser/locale/en-US';
 import localeWorkplace from '@/views/dashboard/workplace/locale/en-US';
 
 import localeSettings from './en-US/settings';
@@ -23,10 +23,10 @@ export default {
   'navbar.action.locale': 'Switch to English',
   'menu.sys.management': 'System Management',
   'menu.sys.menu': 'Menu Management',
-  'menu.sys.user': 'User Management',
   'menu.user.setting': 'User Setting',
   'menu.user.central': 'User Central',
   ...localeSettings,
+  ...localeUser,
   ...localeMessageBox,
   ...localeLogin,
   ...localeWorkplace,

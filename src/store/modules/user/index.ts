@@ -13,9 +13,8 @@ const useUserStore = defineStore('user', {
   state: (): UserState => ({
     userName: undefined,
     userAvatar: undefined,
-    userRole: 'user',
+    userRole: '',
     userAccount: undefined,
-    token: '',
   }),
 
   getters: {
@@ -53,11 +52,6 @@ const useUserStore = defineStore('user', {
         const res = await userLogin(loginForm);
         // 存token
         setToken(res.data.token);
-        this.userName = res.data.userName
-        this.userAccount = res.data.userAccount
-        this.userRole = res.data.userRole
-        this.token = res.data.token
-        this.userAvatar = res.data.userAvatar
       } catch (err) {
         clearToken();
         throw err;
