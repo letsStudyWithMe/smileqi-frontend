@@ -23,7 +23,7 @@ export interface User {
   userName: string;
   userAvatar: string;
   userRole: string;
-  createdTime: string;
+  createTime: string;
   isDelete: boolean;
 }
 

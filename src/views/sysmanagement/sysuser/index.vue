@@ -6,12 +6,12 @@
         <a-col :flex="1">
           <a-form
             :model="formModel"
-            :label-col-props="{ span: 3 }"
-            :wrapper-col-props="{ span: 12 }"
+            :label-col-props="{ span: 6 }"
+            :wrapper-col-props="{ span: 18 }"
             label-align="left"
           >
-            <a-row :gutter="18">
-              <a-col :span="9">
+            <a-row :gutter="16">
+              <a-col :span="8">
                 <a-form-item
                   field="userAccount"
                   :label="$t('searchTable.form.userAccount')"
@@ -22,7 +22,7 @@
                   />
                 </a-form-item>
               </a-col>
-              <a-col :span="9">
+              <a-col :span="8">
                 <a-form-item field="userName" :label="$t('searchTable.form.userName')">
                   <a-input
                     v-model="formModel.userName"
@@ -30,25 +30,25 @@
                   />
                 </a-form-item>
               </a-col>
-<!--              <a-col :span="8">-->
-<!--                <a-form-item-->
-<!--                  field="contentType"-->
-<!--                  :label="$t('searchTable.form.contentType')"-->
-<!--                >-->
-<!--                  <a-select-->
-<!--                    v-model="formModel.contentType"-->
-<!--                    :options="contentTypeOptions"-->
-<!--                    :placeholder="$t('searchTable.form.selectDefault')"-->
-<!--                  />-->
-<!--                </a-form-item>-->
-<!--              </a-col>-->
+              <a-col :span="8">
+                <a-form-item
+                  field="contentType"
+                  :label="$t('searchTable.form.userRole')"
+                >
+                  <a-select
+                    v-model="formModel.userRole"
+                    :options="userRoleOptions"
+                    :placeholder="$t('searchTable.form.selectDefault')"
+                  />
+                </a-form-item>
+              </a-col>
             </a-row>
           </a-form>
         </a-col>
-        <a-divider style="height: 84px" direction="vertical" />
+        <a-divider style="height: 52px" direction="vertical" />
         <a-col :flex="'200px'" style="text-align: right">
           <a-space direction="" :size="18">
-            <a-button type="primary" @click="search">
+            <a-button type="primary" @click="search" style="margin-right: 25px">
               <template #icon>
                 <icon-search />
               </template>
@@ -67,7 +67,7 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="12">
           <a-space>
-            <a-button type="primary">
+            <a-button type="primary" @click="handleAdd">
               <template #icon>
                 <icon-plus />
               </template>
@@ -201,12 +201,52 @@
 <!--          {{ $t(`searchTable.form.status.${record.status}`) }}-->
 <!--        </template>-->
         <template #operations>
-          <a-button v-permission="['admin']" type="text" size="small">
-            {{ $t('searchTable.columns.operations.view') }}
+          <a-button type="text" size="small" @click="handleUpdate">
+            {{ $t('searchTable.columns.operations.update') }}
+          </a-button>
+          <a-button type="text" size="small">
+            {{ $t('searchTable.columns.operations.delete') }}
           </a-button>
         </template>
       </a-table>
     </a-card>
+    <a-modal
+      :title="isAddTitle ? $t('searchTable.model.add.title') : $t('searchTable.model.update.title')"
+      :visible=showModel
+      @ok="handleCancel"
+      @cancel="handleCancel"
+      title-align="start">
+      <a-form
+        :model="formModel"
+        label-align="center"
+      >
+        <a-form-item
+          field="userAccount"
+          :label="$t('searchTable.form.userAccount')"
+        >
+          <a-input
+            v-model="formModel.userAccount"
+            :placeholder="$t('searchTable.form.userAccount.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="userName" :label="$t('searchTable.form.userName')">
+          <a-input
+            v-model="formModel.userName"
+            :placeholder="$t('searchTable.form.userName.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item
+          field="contentType"
+          :label="$t('searchTable.form.userRole')"
+        >
+          <a-select
+            v-model="formModel.userRole"
+            :options="userRoleOptions"
+            :placeholder="$t('searchTable.form.selectDefault')"
+          />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
@@ -230,7 +270,7 @@ const generateFormModel = () => {
     userName: '',
     userAccount: '',
     userRole: '',
-    createdTime: '',
+    createTime: '',
     isDelete: '',
   };
 };
@@ -242,6 +282,27 @@ const cloneColumns = ref<Column[]>([]);
 const showColumns = ref<Column[]>([]);
 
 const size = ref<SizeProps>('medium');
+
+const showModel = ref(false);
+let isAddTitle = true;
+const handleAdd = () => {
+  isAddTitle = true;
+  showModel.value= true;
+}
+const handleUpdate = () => {
+  isAddTitle = false;
+  showModel.value= true;
+}
+const handleCancel = () => {
+  showModel.value= false;
+}
+
+
+
+
+
+
+
 
 const basePagination: Pagination = {
   current: 1,
@@ -273,54 +334,58 @@ const columns = computed<TableColumnData[]>(() => [
     title: t('searchTable.columns.id'),
     dataIndex: 'id',
     slotName: 'id',
+    align: 'center',
   },
   {
     title: t('searchTable.columns.userAccount'),
     dataIndex: 'userAccount',
+    align: 'center',
   },
   {
     title: t('searchTable.columns.userName'),
     dataIndex: 'userName',
+    align: 'center',
   },
   {
     title: t('searchTable.columns.userAvatar'),
     dataIndex: 'userAvatar',
     slotName: 'userAvatar',
+    align: 'center',
   },
   {
     title: t('searchTable.columns.userRole'),
     dataIndex: 'userRole',
     slotName: 'userRole',
+    align: 'center',
   },
   {
-    title: t('searchTable.columns.createdTime'),
-    dataIndex: 'createdTime',
+    title: t('searchTable.columns.createTime'),
+    dataIndex: 'createTime',
+    align: 'center',
   },
   {
     title: t('searchTable.columns.isDelete'),
     dataIndex: 'isDelete',
     slotName: 'isDelete',
+    align: 'center',
   },
   {
     title: t('searchTable.columns.operations'),
     dataIndex: 'operations',
     slotName: 'operations',
+    align: 'center',
   },
 ]);
-// const contentTypeOptions = computed<SelectOptionData[]>(() => [
-//   {
-//     label: t('searchTable.form.contentType.img'),
-//     value: 'img',
-//   },
-//   {
-//     label: t('searchTable.form.contentType.horizontalVideo'),
-//     value: 'horizontalVideo',
-//   },
-//   {
-//     label: t('searchTable.form.contentType.verticalVideo'),
-//     value: 'verticalVideo',
-//   },
-// ]);
+const userRoleOptions = computed<SelectOptionData[]>(() => [
+  {
+    label: t('searchTable.form.userRole.admin'),
+    value: 'admin',
+  },
+  {
+    label: t('searchTable.form.userRole.user'),
+    value: 'user',
+  },
+]);
 // const filterTypeOptions = computed<SelectOptionData[]>(() => [
 //   {
 //     label: t('searchTable.form.filterType.artificial'),
@@ -472,5 +537,8 @@ export default {
     margin-left: 12px;
     cursor: pointer;
   }
+}
+.arco-form-item-label{
+  text-align: center;
 }
 </style>

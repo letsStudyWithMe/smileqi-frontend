@@ -5,23 +5,27 @@ export default {
   'searchTable.form.userName': '名称',
   'searchTable.form.userName.placeholder': '请输入名称',
 
-  // 'searchTable.form.contentType': '内容体裁',
-  // 'searchTable.form.contentType.img': '图文',
-  // 'searchTable.form.contentType.horizontalVideo': '横版短视频',
+  'searchTable.form.userRole': '角色',
+  'searchTable.form.userRole.admin': '管理员',
+  'searchTable.form.userRole.user': '普通用户',
   // 'searchTable.form.contentType.verticalVideo': '竖版小视频',
   // 'searchTable.form.filterType': '筛选方式',
   // 'searchTable.form.filterType.artificial': '人工筛选',
   // 'searchTable.form.filterType.rules': '规则筛选',
-  // 'searchTable.form.createdTime': '创建时间',
+  // 'searchTable.form.createTime': '创建时间',
   // 'searchTable.form.status': '状态',
   // 'searchTable.form.status.online': '已上线',
   // 'searchTable.form.status.offline': '已下线',
   'searchTable.form.search': '查询',
   'searchTable.form.reset': '重置',
-  // 'searchTable.form.selectDefault': '全部',
+  'searchTable.form.selectDefault': '全部',
   'searchTable.operation.create': '新建',
   // 'searchTable.operation.import': '批量导入',
   // 'searchTable.operation.download': '下载',
+
+  // model
+  'searchTable.model.add.title': '新增',
+  'searchTable.model.update.title': '修改',
 
   // columns
   'searchTable.columns.id': 'id',
@@ -29,10 +33,11 @@ export default {
   'searchTable.columns.userName': '名称',
   'searchTable.columns.userAvatar': '头像',
   'searchTable.columns.userRole': '角色',
-  'searchTable.columns.createdTime': '创建时间',
+  'searchTable.columns.createTime': '创建时间',
   'searchTable.columns.isDelete': '状态',
   'searchTable.columns.operations': '操作',
-  'searchTable.columns.operations.view': '查看',
+  'searchTable.columns.operations.delete': '删除',
+  'searchTable.columns.operations.update': '编辑',
 
   // size
   'searchTable.size.mini': '迷你',
