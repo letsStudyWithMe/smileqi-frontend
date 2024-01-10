@@ -538,7 +538,4 @@ export default {
     cursor: pointer;
   }
 }
-.arco-form-item-label{
-  text-align: center;
-}
 </style>
