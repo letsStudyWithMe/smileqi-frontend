@@ -211,7 +211,7 @@
       </a-table>
     </a-card>
     <a-modal
-      :title="isAddTitle ? $t('searchTable.model.add.title') : $t('searchTable.model.update.title')"
+      :title="isAdd ? $t('searchTable.model.add.title') : $t('searchTable.model.update.title')"
       :visible=showModel
       @ok="handleCancel"
       @cancel="handleCancel"
@@ -284,13 +284,13 @@ const showColumns = ref<Column[]>([]);
 const size = ref<SizeProps>('medium');
 
 const showModel = ref(false);
-let isAddTitle = true;
+let isAdd = true;
 const handleAdd = () => {
-  isAddTitle = true;
+  isAdd = true;
   showModel.value= true;
 }
 const handleUpdate = () => {
-  isAddTitle = false;
+  isAdd = false;
   showModel.value= true;
 }
 const handleCancel = () => {

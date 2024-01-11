@@ -4,6 +4,8 @@ export default {
   'searchTable.form.userAccount.placeholder': '请输入账号',
   'searchTable.form.userName': '名称',
   'searchTable.form.userName.placeholder': '请输入名称',
+  'searchTable.form.userPassword': '密码',
+  'searchTable.form.userPassword.placeholder': '请输入密码',
 
   'searchTable.form.userRole': '角色',
   'searchTable.form.userRole.admin': '管理员',
@@ -38,6 +40,7 @@ export default {
   'searchTable.columns.operations': '操作',
   'searchTable.columns.operations.delete': '删除',
   'searchTable.columns.operations.update': '编辑',
+  'searchTable.columns.operations.delete.prompt': '确定要删除吗?',
 
   // size
   'searchTable.size.mini': '迷你',

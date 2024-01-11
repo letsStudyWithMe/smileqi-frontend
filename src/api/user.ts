@@ -12,19 +12,25 @@ export interface token {
   token: string;
 }
 
+export interface BooleanRes {
+  data : any;
+  code : number;
+  message : string;
+}
+
 export interface LoginRes {
   token: string;
 }
 
 export interface User {
-  id: number;
+  id: string;
   userAccount: string;
   userPassword: string;
   userName: string;
   userAvatar: string;
   userRole: string;
   createTime: string;
-  isDelete: boolean;
+  isDelete: string;
 }
 
 export interface UserParams extends Partial<User> {
@@ -43,6 +49,22 @@ export function login(data: LoginData) {
 
 export function getUserInfo() {
   return axios.get<UserState>('/sysuser/get/login');
+}
+
+export function getUserInfoById(id:any) {
+  return axios.get<User>(`/sysuser/get/${id}`);
+}
+
+export function deleteUserInfoById(id:any) {
+  return axios.get<BooleanRes>(`/sysuser/delete/${id}`);
+}
+
+export function updateUserInfoById(data: User) {
+  return axios.post<BooleanRes>('/sysuser/update', data);
+}
+
+export function addUserInfo(data: User) {
+  return axios.post<BooleanRes>('/sysuser/register', data);
 }
 
 export function getMenuList() {

@@ -4,6 +4,9 @@ export default {
   'searchTable.form.userAccount.placeholder': 'Please enter Set Account',
   'searchTable.form.userName': 'Set Name',
   'searchTable.form.userName.placeholder': 'Please enter Set Name',
+  'searchTable.form.userPassword': 'Set Password',
+  'searchTable.form.userPassword.placeholder': 'Please enter Set Password',
+
   'searchTable.form.contentType': 'User Role',
   'searchTable.form.userRole.admin': 'Admin',
   'searchTable.form.userRole.user': 'User',
@@ -37,6 +40,7 @@ export default {
   'searchTable.columns.operations': 'Operations',
   'searchTable.columns.operations.delete': 'Delete',
   'searchTable.columns.operations.update': 'Update',
+  'searchTable.columns.operations.delete.prompt': 'Are you sure you want to delete?',
   // size
   'searchTable.size.mini': 'mini',
   'searchTable.size.small': 'small',
