@@ -210,7 +210,7 @@
           <a-button @click="handleUpdateShow(record.id)" type="text" size="small">
             {{ $t("searchTable.columns.operations.update") }}
           </a-button>
-          <a-popconfirm :content="$t('searchTable.columns.operations.delete.prompt')" @ok="handleDelete(record.id)">
+          <a-popconfirm :content="$t('searchTable.columns.operations.delete.prompt')" v-if="record.isDelete == 0" @ok="handleDelete(record.id)">
             <a-button type="text" size="small">
               {{ $t("searchTable.columns.operations.delete") }}
             </a-button>
@@ -280,6 +280,7 @@ import type { TableColumnData } from "@arco-design/web-vue/es/table/interface";
 import cloneDeep from "lodash/cloneDeep";
 import Sortable from "sortablejs";
 import { Message, Notification } from "@arco-design/web-vue";
+import { filter } from "lodash";
 
 type SizeProps = "mini" | "small" | "medium" | "large";
 type Column = TableColumnData & { checked?: true };
@@ -302,7 +303,7 @@ const queryParams = ref(generateQueryParams());
 const formModel = ref(generateQueryParams());
 const cloneColumns = ref<Column[]>([]);
 const showColumns = ref<Column[]>([]);
-
+const total = ref<number>();
 const size = ref<SizeProps>("medium");
 
 // 新增或修改弹窗
@@ -364,8 +365,23 @@ const handleDelete = async (id: any) => {
 };
 
 const basePagination: Pagination = {
-  current: 1,
-  pageSize: 20
+  total: total.value,
+  current: 1, // 默认当前叶数
+  pageSize: 10, // 默认每页条数
+  showJumper: true, // 是否可以显示跳转到某页
+  pageSizeOptions: [10, 20, 40, 80, 100], // 可切换每叶数据条数
+  showTotal: true, // 显示总数
+  hideOnSinglePage: false, // 只有一页时是否隐藏分页器 true为不显示 false为显示
+  size: "small", // 尺寸
+  simple: false, // 简洁分页
+  showPageSize: true,
+  onPageChange: (current:number) => {
+    pagination.current = current;
+  },
+  onPageSizeChange: (pageSize: number) => {
+    console.log(pageSize)
+    pagination.pageSize = pageSize;
+  }
 };
 const pagination = reactive({
   ...basePagination
@@ -426,7 +442,7 @@ const columns = computed<TableColumnData[]>(() => [
     title: t("searchTable.columns.isDelete"),
     dataIndex: "isDelete",
     slotName: "isDelete",
-    align: "center"
+    align: "center",
   },
   {
     title: t("searchTable.columns.operations"),
@@ -471,6 +487,7 @@ const fetchData = async (
   setLoading(true);
   try {
     const { data } = await queryUserList(params);
+    total.value = data.total;
     renderData.value = data.records;
     pagination.current = params.current;
     pagination.total = data.total;
@@ -483,7 +500,7 @@ const fetchData = async (
 
 const search = () => {
   fetchData({
-    ...basePagination,
+     ...basePagination,
     ...queryParams.value
   } as unknown as UserParams);
 };

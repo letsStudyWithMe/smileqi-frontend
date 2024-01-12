@@ -1,11 +1,11 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.sys.management', 'menu.sys.user']" />
-    <a-card class="general-card" :title="$t('menu.sys.user')">
+    <Breadcrumb :items="['menu.sys.management', 'menu.sys.menu']" />
+    <a-card class="general-card" :title="$t('menu.sys.menu')">
       <a-row>
         <a-col :flex="1">
           <a-form
-            :model="formModel"
+            :model="queryParams"
             :label-col-props="{ span: 6 }"
             :wrapper-col-props="{ span: 18 }"
             label-align="left"
@@ -17,7 +17,7 @@
                   :label="$t('searchTable.form.userAccount')"
                 >
                   <a-input
-                    v-model="formModel.userAccount"
+                    v-model="queryParams.userAccount"
                     :placeholder="$t('searchTable.form.userAccount.placeholder')"
                   />
                 </a-form-item>
@@ -25,7 +25,7 @@
               <a-col :span="8">
                 <a-form-item field="userName" :label="$t('searchTable.form.userName')">
                   <a-input
-                    v-model="formModel.userName"
+                    v-model="queryParams.userName"
                     :placeholder="$t('searchTable.form.userName.placeholder')"
                   />
                 </a-form-item>
@@ -36,7 +36,7 @@
                   :label="$t('searchTable.form.userRole')"
                 >
                   <a-select
-                    v-model="formModel.userRole"
+                    v-model="queryParams.userRole"
                     :options="userRoleOptions"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
@@ -52,13 +52,13 @@
               <template #icon>
                 <icon-search />
               </template>
-              {{ $t('searchTable.form.search') }}
+              {{ $t("searchTable.form.search") }}
             </a-button>
             <a-button @click="reset">
               <template #icon>
                 <icon-refresh />
               </template>
-              {{ $t('searchTable.form.reset') }}
+              {{ $t("searchTable.form.reset") }}
             </a-button>
           </a-space>
         </a-col>
@@ -67,11 +67,11 @@
       <a-row style="margin-bottom: 16px">
         <a-col :span="12">
           <a-space>
-            <a-button type="primary" @click="handleAdd">
+            <a-button type="primary" @click="handleAddShow">
               <template #icon>
                 <icon-plus />
               </template>
-              {{ $t('searchTable.operation.create') }}
+              {{ $t("searchTable.operation.create") }}
             </a-button>
             <!--            <a-upload action="/">-->
             <!--              <template #upload-button>-->
@@ -94,12 +94,16 @@
           <!--          </a-button>-->
           <a-tooltip :content="$t('searchTable.actions.refresh')">
             <div class="action-icon" @click="search"
-            ><icon-refresh size="18"
-            /></div>
+            >
+              <icon-refresh size="18"
+              />
+            </div>
           </a-tooltip>
           <a-dropdown @select="handleSelectDensity">
             <a-tooltip :content="$t('searchTable.actions.density')">
-              <div class="action-icon"><icon-line-height size="18" /></div>
+              <div class="action-icon">
+                <icon-line-height size="18" />
+              </div>
             </a-tooltip>
             <template #content>
               <a-doption
@@ -118,7 +122,9 @@
               position="bl"
               @popup-visible-change="popupVisibleChange"
             >
-              <div class="action-icon"><icon-settings size="18" /></div>
+              <div class="action-icon">
+                <icon-settings size="18" />
+              </div>
               <template #content>
                 <div id="tableSetting">
                   <div
@@ -139,7 +145,7 @@
                       </a-checkbox>
                     </div>
                     <div class="title">
-                      {{ item.title === '#' ? '序列号' : item.title }}
+                      {{ item.title === "#" ? "序列号" : item.title }}
                     </div>
                   </div>
                 </div>
@@ -200,30 +206,29 @@
         <!--          <span v-else class="circle pass"></span>-->
         <!--          {{ $t(`searchTable.form.status.${record.status}`) }}-->
         <!--        </template>-->
-        <template #operations>
-          <a-button type="text" size="small" @click="handleUpdate">
-            {{ $t('searchTable.columns.operations.update') }}
+        <template #operations="{ record }">
+          <a-button @click="handleUpdateShow(record.id)" type="text" size="small">
+            {{ $t("searchTable.columns.operations.update") }}
           </a-button>
-          <a-button type="text" size="small">
-            {{ $t('searchTable.columns.operations.delete') }}
-          </a-button>
+          <a-popconfirm :content="$t('searchTable.columns.operations.delete.prompt')" v-if="record.isDelete == 0" @ok="handleDelete(record.id)">
+            <a-button type="text" size="small">
+              {{ $t("searchTable.columns.operations.delete") }}
+            </a-button>
+          </a-popconfirm>
         </template>
       </a-table>
     </a-card>
     <a-modal
       :title="isAdd ? $t('searchTable.model.add.title') : $t('searchTable.model.update.title')"
       :visible=showModel
-      @ok="handleCancel"
+      @ok="handleAddOrUpdate(formModel)"
       @cancel="handleCancel"
       title-align="start">
       <a-form
         :model="formModel"
         label-align="center"
       >
-        <a-form-item
-          field="userAccount"
-          :label="$t('searchTable.form.userAccount')"
-        >
+        <a-form-item field="userAccount" v-if="isAdd" :label="$t('searchTable.form.userAccount')">
           <a-input
             v-model="formModel.userAccount"
             :placeholder="$t('searchTable.form.userAccount.placeholder')"
@@ -233,6 +238,12 @@
           <a-input
             v-model="formModel.userName"
             :placeholder="$t('searchTable.form.userName.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="userPassWord"  v-if="isAdd"  :label="$t('searchTable.form.userPassword')">
+          <a-input
+            v-model="formModel.userPassword"
+            :placeholder="$t('searchTable.form.userPassword.placeholder')"
           />
         </a-form-item>
         <a-form-item
@@ -251,140 +262,207 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, reactive, watch, nextTick } from 'vue';
-import { useI18n } from 'vue-i18n';
-import useLoading from '@/hooks/loading';
-import { queryUserList, User, UserParams } from '@/api/user';
-import { Pagination } from '@/types/global';
-import type { SelectOptionData } from '@arco-design/web-vue/es/select/interface';
-import type { TableColumnData } from '@arco-design/web-vue/es/table/interface';
-import cloneDeep from 'lodash/cloneDeep';
-import Sortable from 'sortablejs';
+import { computed, ref, reactive, watch, nextTick } from "vue";
+import { useI18n } from "vue-i18n";
+import useLoading from "@/hooks/loading";
+import {
+  addUserInfo,
+  deleteUserInfoById,
+  getUserInfoById,
+  queryUserList,
+  updateUserInfoById,
+  User,
+  UserParams
+} from "@/api/user";
+import { Pagination } from "@/types/global";
+import type { SelectOptionData } from "@arco-design/web-vue/es/select/interface";
+import type { TableColumnData } from "@arco-design/web-vue/es/table/interface";
+import cloneDeep from "lodash/cloneDeep";
+import Sortable from "sortablejs";
+import { Message, Notification } from "@arco-design/web-vue";
 
-type SizeProps = 'mini' | 'small' | 'medium' | 'large';
+type SizeProps = "mini" | "small" | "medium" | "large";
 type Column = TableColumnData & { checked?: true };
 
-const generateFormModel = () => {
+const generateQueryParams = () => {
   return {
-    id: '',
-    userName: '',
-    userAccount: '',
-    userRole: '',
-    createTime: '',
-    isDelete: '',
+    id: "",
+    userName: "",
+    userAccount: "",
+    userPassword: "",
+    userRole: "",
+    createTime: "",
+    isDelete: ""
   };
 };
 const { loading, setLoading } = useLoading(true);
 const { t } = useI18n();
 const renderData = ref<User[]>([]);
-const formModel = ref(generateFormModel());
+const queryParams = ref(generateQueryParams());
+const formModel = ref(generateQueryParams());
 const cloneColumns = ref<Column[]>([]);
 const showColumns = ref<Column[]>([]);
+const total = ref<number>();
+const size = ref<SizeProps>("medium");
 
-const size = ref<SizeProps>('medium');
-
+// 新增或修改弹窗
 const showModel = ref(false);
 let isAdd = true;
-const handleAdd = () => {
+const handleAddShow = () => {
+  formModel.value = generateQueryParams();
   isAdd = true;
-  showModel.value= true;
-}
-const handleUpdate = () => {
+  showModel.value = true;
+};
+const handleUpdateShow = async (id: any) => {
+  const res = await getUserInfoById(id);
+  formModel.value = res.data;
   isAdd = false;
-  showModel.value= true;
-}
+  showModel.value = true;
+};
 const handleCancel = () => {
-  showModel.value= false;
-}
+  showModel.value = false;
+};
+const handleAddOrUpdate = async (params:any) => {
+  let res = {} as any;
+  if (isAdd){
+    // 新增
+    res = await addUserInfo(params);
+  }else {
+    // 修改
+    res = await updateUserInfoById(params);
+  }
+  if (res.code !== 0) {
+    Message.error({
+      content: res.message,
+      duration: 5 * 1000,
+    });
+  } else {
+    Message.success({
+      content: "SUCCESS",
+      duration: 5 * 1000,
+    });
+    showModel.value = false;
+    // 重新查询数据
+    search();
+  }
+};
 
-
-
-
-
-
-
+// 删除按钮
+const handleDelete = async (id: any) => {
+  const res = await deleteUserInfoById(id);
+  if (res.data) {
+    Notification.success({
+      content: "SUCCESS!"
+    });
+    // 删除之后重新查询数据
+    search();
+  } else {
+    Notification.error({
+      content: "FAILD!"
+    });
+  }
+};
 
 const basePagination: Pagination = {
-  current: 1,
-  pageSize: 20,
+  total: total.value,
+  current: 1, // 默认当前叶数
+  pageSize: 10, // 默认每页条数
+  showJumper: true, // 是否可以显示跳转到某页
+  pageSizeOptions: [10, 20, 40, 80, 100], // 可切换每叶数据条数
+  showTotal: true, // 显示总数
+  hideOnSinglePage: false, // 只有一页时是否隐藏分页器 true为不显示 false为显示
+  size: "small", // 尺寸
+  simple: false, // 简洁分页
+  showPageSize: true,
+  onPageChange: (current:number) => {
+    pagination.current = current;
+  },
+  onPageSizeChange: (pageSize: number) => {
+    console.log(pageSize)
+    pagination.pageSize = pageSize;
+  }
 };
 const pagination = reactive({
-  ...basePagination,
+  ...basePagination
 });
 const densityList = computed(() => [
   {
-    name: t('searchTable.size.mini'),
-    value: 'mini',
+    name: t("searchTable.size.mini"),
+    value: "mini"
   },
   {
-    name: t('searchTable.size.small'),
-    value: 'small',
+    name: t("searchTable.size.small"),
+    value: "small"
   },
   {
-    name: t('searchTable.size.medium'),
-    value: 'medium',
+    name: t("searchTable.size.medium"),
+    value: "medium"
   },
   {
-    name: t('searchTable.size.large'),
-    value: 'large',
-  },
+    name: t("searchTable.size.large"),
+    value: "large"
+  }
 ]);
 const columns = computed<TableColumnData[]>(() => [
   {
-    title: t('searchTable.columns.id'),
-    dataIndex: 'id',
-    slotName: 'id',
-    align: 'center',
+    title: t("searchTable.columns.id"),
+    dataIndex: "id",
+    slotName: "id",
+    align: "center"
   },
   {
-    title: t('searchTable.columns.userAccount'),
-    dataIndex: 'userAccount',
-    align: 'center',
+    title: t("searchTable.columns.userAccount"),
+    dataIndex: "userAccount",
+    align: "center"
   },
   {
-    title: t('searchTable.columns.userName'),
-    dataIndex: 'userName',
-    align: 'center',
+    title: t("searchTable.columns.userName"),
+    dataIndex: "userName",
+    align: "center"
   },
   {
-    title: t('searchTable.columns.userAvatar'),
-    dataIndex: 'userAvatar',
-    slotName: 'userAvatar',
-    align: 'center',
+    title: t("searchTable.columns.userAvatar"),
+    dataIndex: "userAvatar",
+    slotName: "userAvatar",
+    align: "center"
   },
   {
-    title: t('searchTable.columns.userRole'),
-    dataIndex: 'userRole',
-    slotName: 'userRole',
-    align: 'center',
+    title: t("searchTable.columns.userRole"),
+    dataIndex: "userRole",
+    slotName: "userRole",
+    align: "center"
   },
   {
-    title: t('searchTable.columns.createTime'),
-    dataIndex: 'createTime',
-    align: 'center',
+    title: t("searchTable.columns.createTime"),
+    dataIndex: "createTime",
+    align: "center"
   },
   {
-    title: t('searchTable.columns.isDelete'),
-    dataIndex: 'isDelete',
-    slotName: 'isDelete',
-    align: 'center',
+    title: t("searchTable.columns.isDelete"),
+    dataIndex: "isDelete",
+    slotName: "isDelete",
+    align: "center",
+    valueEnum: {
+      0: { text: '正常'},
+      1: { text: '删除'},
+    },
   },
   {
-    title: t('searchTable.columns.operations'),
-    dataIndex: 'operations',
-    slotName: 'operations',
-    align: 'center',
-  },
+    title: t("searchTable.columns.operations"),
+    dataIndex: "operations",
+    slotName: "operations",
+    align: "center"
+  }
 ]);
 const userRoleOptions = computed<SelectOptionData[]>(() => [
   {
-    label: t('searchTable.form.userRole.admin'),
-    value: 'admin',
+    label: t("searchTable.form.userRole.admin"),
+    value: "admin"
   },
   {
-    label: t('searchTable.form.userRole.user'),
-    value: 'user',
-  },
+    label: t("searchTable.form.userRole.user"),
+    value: "user"
+  }
 ]);
 // const filterTypeOptions = computed<SelectOptionData[]>(() => [
 //   {
@@ -412,6 +490,7 @@ const fetchData = async (
   setLoading(true);
   try {
     const { data } = await queryUserList(params);
+    total.value = data.total;
     renderData.value = data.records;
     pagination.current = params.current;
     pagination.total = data.total;
@@ -425,7 +504,7 @@ const fetchData = async (
 const search = () => {
   fetchData({
     ...basePagination,
-    ...formModel.value,
+    ...queryParams.value
   } as unknown as UserParams);
 };
 const onPageChange = (current: number) => {
@@ -434,7 +513,7 @@ const onPageChange = (current: number) => {
 
 fetchData();
 const reset = () => {
-  formModel.value = generateFormModel();
+  queryParams.value = generateQueryParams();
 };
 
 const handleSelectDensity = (
@@ -479,13 +558,13 @@ const exchangeArray = <T extends Array<any>>(
 const popupVisibleChange = (val: boolean) => {
   if (val) {
     nextTick(() => {
-      const el = document.getElementById('tableSetting') as HTMLElement;
+      const el = document.getElementById("tableSetting") as HTMLElement;
       const sortable = new Sortable(el, {
         onEnd(e: any) {
           const { oldIndex, newIndex } = e;
           exchangeArray(cloneColumns.value, oldIndex, newIndex);
           exchangeArray(showColumns.value, oldIndex, newIndex);
-        },
+        }
       });
     });
   }
@@ -506,7 +585,7 @@ watch(
 
 <script lang="ts">
 export default {
-  name: 'SysManagement',
+  name: "SysManagement"
 };
 </script>
 
@@ -514,6 +593,7 @@ export default {
 .container {
   padding: 0 20px 20px 20px;
 }
+
 :deep(.arco-table-th) {
   &:last-child {
     .arco-table-th-item-title {
@@ -521,18 +601,22 @@ export default {
     }
   }
 }
+
 .action-icon {
   margin-left: 12px;
   cursor: pointer;
 }
+
 .active {
   color: #0960bd;
   background-color: #e3f4fc;
 }
+
 .setting {
   display: flex;
   align-items: center;
   width: 200px;
+
   .title {
     margin-left: 12px;
     cursor: pointer;

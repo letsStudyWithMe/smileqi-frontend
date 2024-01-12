@@ -81,5 +81,5 @@ export function getMenuList() {
 // }
 
 export function queryUserList(params: UserParams) {
-  return axios.post<UserListRes>('/sysuser/list/page', params);
+  return axios.post<UserListRes>('/sysuser/list/page/vo', params);
 }

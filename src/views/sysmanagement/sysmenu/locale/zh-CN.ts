@@ -1,9 +1,9 @@
 export default {
   'menu.sys.menu': '菜单管理',
-  'searchTable.form.userAccount': '账号',
-  'searchTable.form.userAccount.placeholder': '请输入账号',
-  'searchTable.form.userName': '名称',
-  'searchTable.form.userName.placeholder': '请输入名称',
+  'searchTable.form.menuName': '菜单名称',
+  'searchTable.form.menuName.placeholder': '请输入菜单名称',
+  'searchTable.form.status': '状态',
+  'searchTable.form.status.placeholder': '请选择状态',
 
   'searchTable.form.userRole': '角色',
   'searchTable.form.userRole.admin': '管理员',
@@ -38,6 +38,7 @@ export default {
   'searchTable.columns.operations': '操作',
   'searchTable.columns.operations.delete': '删除',
   'searchTable.columns.operations.update': '编辑',
+  'searchTable.columns.operations.delete.prompt': '确定要删除吗?',
 
   // size
   'searchTable.size.mini': '迷你',
