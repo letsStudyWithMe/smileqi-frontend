@@ -280,7 +280,6 @@ import type { TableColumnData } from "@arco-design/web-vue/es/table/interface";
 import cloneDeep from "lodash/cloneDeep";
 import Sortable from "sortablejs";
 import { Message, Notification } from "@arco-design/web-vue";
-import { filter } from "lodash";
 
 type SizeProps = "mini" | "small" | "medium" | "large";
 type Column = TableColumnData & { checked?: true };

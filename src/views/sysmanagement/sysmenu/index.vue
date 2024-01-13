@@ -13,31 +13,23 @@
             <a-row :gutter="16">
               <a-col :span="8">
                 <a-form-item
-                  field="userAccount"
-                  :label="$t('searchTable.form.userAccount')"
+                  field="name"
+                  :label="$t('searchTable.form.name')"
                 >
                   <a-input
-                    v-model="queryParams.userAccount"
-                    :placeholder="$t('searchTable.form.userAccount.placeholder')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="userName" :label="$t('searchTable.form.userName')">
-                  <a-input
-                    v-model="queryParams.userName"
-                    :placeholder="$t('searchTable.form.userName.placeholder')"
+                    v-model="queryParams.name"
+                    :placeholder="$t('searchTable.form.name.placeholder')"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
                 <a-form-item
-                  field="contentType"
-                  :label="$t('searchTable.form.userRole')"
+                  field="status"
+                  :label="$t('searchTable.form.status')"
                 >
                   <a-select
-                    v-model="queryParams.userRole"
-                    :options="userRoleOptions"
+                    v-model="queryParams.status"
+                    :options="statusOptions"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
@@ -73,25 +65,12 @@
               </template>
               {{ $t("searchTable.operation.create") }}
             </a-button>
-            <!--            <a-upload action="/">-->
-            <!--              <template #upload-button>-->
-            <!--                <a-button>-->
-            <!--                  {{ $t('searchTable.operation.import') }}-->
-            <!--                </a-button>-->
-            <!--              </template>-->
-            <!--            </a-upload>-->
           </a-space>
         </a-col>
         <a-col
           :span="12"
           style="display: flex; align-items: center; justify-content: end"
         >
-          <!--          <a-button>-->
-          <!--            <template #icon>-->
-          <!--              <icon-download />-->
-          <!--            </template>-->
-          <!--            {{ $t('searchTable.operation.download') }}-->
-          <!--          </a-button>-->
           <a-tooltip :content="$t('searchTable.actions.refresh')">
             <div class="action-icon" @click="search"
             >
@@ -160,57 +139,19 @@
         :pagination="pagination"
         :columns="(cloneColumns as TableColumnData[])"
         :data="renderData"
-        :bordered="false"
+        :expandable="expandedRowRender(record)"
+        :bordered="true"
         :size="size"
         @page-change="onPageChange"
       >
         <template #index="{ rowIndex }">
           {{ rowIndex + 1 + (pagination.current - 1) * pagination.pageSize }}
         </template>
-        <!--        <template #contentType="{ record }">-->
-        <!--          <a-space>-->
-        <!--            <a-avatar-->
-        <!--              v-if="record.contentType === 'img'"-->
-        <!--              :size="16"-->
-        <!--              shape="square"-->
-        <!--            >-->
-        <!--              <img-->
-        <!--                alt="avatar"-->
-        <!--                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/581b17753093199839f2e327e726b157.svg~tplv-49unhts6dw-image.image"-->
-        <!--              />-->
-        <!--            </a-avatar>-->
-        <!--            <a-avatar-->
-        <!--              v-else-if="record.contentType === 'horizontalVideo'"-->
-        <!--              :size="16"-->
-        <!--              shape="square"-->
-        <!--            >-->
-        <!--              <img-->
-        <!--                alt="avatar"-->
-        <!--                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/77721e365eb2ab786c889682cbc721c1.svg~tplv-49unhts6dw-image.image"-->
-        <!--              />-->
-        <!--            </a-avatar>-->
-        <!--            <a-avatar v-else :size="16" shape="square">-->
-        <!--              <img-->
-        <!--                alt="avatar"-->
-        <!--                src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/ea8b09190046da0ea7e070d83c5d1731.svg~tplv-49unhts6dw-image.image"-->
-        <!--              />-->
-        <!--            </a-avatar>-->
-        <!--            {{ $t(`searchTable.form.contentType.${record.contentType}`) }}-->
-        <!--          </a-space>-->
-        <!--        </template>-->
-        <!--        <template #filterType="{ record }">-->
-        <!--          {{ $t(`searchTable.form.filterType.${record.filterType}`) }}-->
-        <!--        </template>-->
-        <!--        <template #status="{ record }">-->
-        <!--          <span v-if="record.status === 'offline'" class="circle"></span>-->
-        <!--          <span v-else class="circle pass"></span>-->
-        <!--          {{ $t(`searchTable.form.status.${record.status}`) }}-->
-        <!--        </template>-->
         <template #operations="{ record }">
           <a-button @click="handleUpdateShow(record.id)" type="text" size="small">
             {{ $t("searchTable.columns.operations.update") }}
           </a-button>
-          <a-popconfirm :content="$t('searchTable.columns.operations.delete.prompt')" v-if="record.isDelete == 0" @ok="handleDelete(record.id)">
+          <a-popconfirm :content="$t('searchTable.columns.operations.delete.prompt')" v-if="record.status == 0" @ok="handleDelete(record.id)">
             <a-button type="text" size="small">
               {{ $t("searchTable.columns.operations.delete") }}
             </a-button>
@@ -228,32 +169,62 @@
         :model="formModel"
         label-align="center"
       >
-        <a-form-item field="userAccount" v-if="isAdd" :label="$t('searchTable.form.userAccount')">
+        <a-form-item field="name" :label="$t('searchTable.form.name')">
           <a-input
-            v-model="formModel.userAccount"
-            :placeholder="$t('searchTable.form.userAccount.placeholder')"
+            v-model="formModel.name"
+            :placeholder="$t('searchTable.form.name.placeholder')"
           />
         </a-form-item>
-        <a-form-item field="userName" :label="$t('searchTable.form.userName')">
+        <a-form-item field="locale" v-if="isAdd" :label="$t('searchTable.form.locale')">
           <a-input
-            v-model="formModel.userName"
-            :placeholder="$t('searchTable.form.userName.placeholder')"
-          />
-        </a-form-item>
-        <a-form-item field="userPassWord"  v-if="isAdd"  :label="$t('searchTable.form.userPassword')">
-          <a-input
-            v-model="formModel.userPassword"
-            :placeholder="$t('searchTable.form.userPassword.placeholder')"
+            v-model="formModel.locale"
+            :placeholder="$t('searchTable.form.locale.placeholder')"
           />
         </a-form-item>
         <a-form-item
-          field="contentType"
-          :label="$t('searchTable.form.userRole')"
+          field="requiresAuth"
+          :label="$t('searchTable.form.requiresAuth')"
         >
           <a-select
-            v-model="formModel.userRole"
-            :options="userRoleOptions"
+            v-model="formModel.requiresAuth"
+            :options="requiresAuthOptions"
             :placeholder="$t('searchTable.form.selectDefault')"
+          />
+        </a-form-item>
+        <a-form-item field="parentId" :label="$t('searchTable.form.parentId')">
+          <a-input
+            v-model="formModel.parentId"
+            :placeholder="$t('searchTable.form.parentId.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="orderNum" :label="$t('searchTable.form.orderNum')">
+          <a-input
+            v-model="formModel.orderNum"
+            :placeholder="$t('searchTable.form.orderNum.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="path" :label="$t('searchTable.form.path')">
+          <a-input
+            v-model="formModel.path"
+            :placeholder="$t('searchTable.form.path.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="perms" :label="$t('searchTable.form.perms')">
+          <a-input
+            v-model="formModel.perms"
+            :placeholder="$t('searchTable.form.perms.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="icon" :label="$t('searchTable.form.icon')">
+          <a-input
+            v-model="formModel.icon"
+            :placeholder="$t('searchTable.form.icon.placeholder')"
+          />
+        </a-form-item>
+        <a-form-item field="status" :label="$t('searchTable.form.status')">
+          <a-input
+            v-model="formModel.status"
+            :placeholder="$t('searchTable.form.status.placeholder')"
           />
         </a-form-item>
       </a-form>
@@ -265,21 +236,21 @@
 import { computed, ref, reactive, watch, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import useLoading from "@/hooks/loading";
-import {
-  addUserInfo,
-  deleteUserInfoById,
-  getUserInfoById,
-  queryUserList,
-  updateUserInfoById,
-  User,
-  UserParams
-} from "@/api/user";
 import { Pagination } from "@/types/global";
 import type { SelectOptionData } from "@arco-design/web-vue/es/select/interface";
 import type { TableColumnData } from "@arco-design/web-vue/es/table/interface";
 import cloneDeep from "lodash/cloneDeep";
 import Sortable from "sortablejs";
 import { Message, Notification } from "@arco-design/web-vue";
+import {
+  addMenuInfo,
+  deleteMenuInfoById,
+  getMenuInfoById,
+  Menu,
+  MenuParams,
+  queryMenuList,
+  updateMenuInfoById
+} from "@/api/menu";
 
 type SizeProps = "mini" | "small" | "medium" | "large";
 type Column = TableColumnData & { checked?: true };
@@ -287,17 +258,21 @@ type Column = TableColumnData & { checked?: true };
 const generateQueryParams = () => {
   return {
     id: "",
-    userName: "",
-    userAccount: "",
-    userPassword: "",
-    userRole: "",
+    locale: "",
+    requiresAuth: "",
+    name: "",
+    parentId: "",
+    orderNum: "",
+    path: "",
+    status: "",
+    perms: "",
+    icon: "",
     createTime: "",
-    isDelete: ""
   };
 };
 const { loading, setLoading } = useLoading(true);
 const { t } = useI18n();
-const renderData = ref<User[]>([]);
+const renderData = ref<Menu[]>([]);
 const queryParams = ref(generateQueryParams());
 const formModel = ref(generateQueryParams());
 const cloneColumns = ref<Column[]>([]);
@@ -314,7 +289,7 @@ const handleAddShow = () => {
   showModel.value = true;
 };
 const handleUpdateShow = async (id: any) => {
-  const res = await getUserInfoById(id);
+  const res = await getMenuInfoById(id);
   formModel.value = res.data;
   isAdd = false;
   showModel.value = true;
@@ -326,10 +301,10 @@ const handleAddOrUpdate = async (params:any) => {
   let res = {} as any;
   if (isAdd){
     // 新增
-    res = await addUserInfo(params);
+    res = await addMenuInfo(params);
   }else {
     // 修改
-    res = await updateUserInfoById(params);
+    res = await updateMenuInfoById(params);
   }
   if (res.code !== 0) {
     Message.error({
@@ -349,7 +324,7 @@ const handleAddOrUpdate = async (params:any) => {
 
 // 删除按钮
 const handleDelete = async (id: any) => {
-  const res = await deleteUserInfoById(id);
+  const res = await deleteMenuInfoById(id);
   if (res.data) {
     Notification.success({
       content: "SUCCESS!"
@@ -385,6 +360,11 @@ const basePagination: Pagination = {
 const pagination = reactive({
   ...basePagination
 });
+const expandedRowRender = async (record: any) => {
+  if(record.key==='3'){
+    return `My Name is ${record.name}`
+  }
+};
 const densityList = computed(() => [
   {
     name: t("searchTable.size.mini"),
@@ -405,32 +385,61 @@ const densityList = computed(() => [
 ]);
 const columns = computed<TableColumnData[]>(() => [
   {
+    dataIndex: "expand",
+    slotName: "expand",
+    align: "center",
+  },
+  {
     title: t("searchTable.columns.id"),
     dataIndex: "id",
     slotName: "id",
     align: "center"
   },
   {
-    title: t("searchTable.columns.userAccount"),
-    dataIndex: "userAccount",
+    title: t("searchTable.columns.locale"),
+    dataIndex: "locale",
     align: "center"
   },
   {
-    title: t("searchTable.columns.userName"),
-    dataIndex: "userName",
+    title: t("searchTable.columns.requiresAuth"),
+    dataIndex: "requiresAuth",
     align: "center"
   },
   {
-    title: t("searchTable.columns.userAvatar"),
-    dataIndex: "userAvatar",
-    slotName: "userAvatar",
+    title: t("searchTable.columns.parentId"),
+    dataIndex: "parentId",
+    slotName: "parentId",
     align: "center"
   },
   {
-    title: t("searchTable.columns.userRole"),
-    dataIndex: "userRole",
-    slotName: "userRole",
-    align: "center"
+    title: t("searchTable.columns.orderNum"),
+    dataIndex: "orderNum",
+    slotName: "orderNum",
+    align: "center",
+  },
+  {
+    title: t("searchTable.columns.path"),
+    dataIndex: "path",
+    slotName: "path",
+    align: "center",
+  },
+  {
+    title: t("searchTable.columns.status"),
+    dataIndex: "status",
+    slotName: "status",
+    align: "center",
+  },
+  {
+    title: t("searchTable.columns.perms"),
+    dataIndex: "perms",
+    slotName: "perms",
+    align: "center",
+  },
+  {
+    title: t("searchTable.columns.icon"),
+    dataIndex: "icon",
+    slotName: "icon",
+    align: "center",
   },
   {
     title: t("searchTable.columns.createTime"),
@@ -438,30 +447,30 @@ const columns = computed<TableColumnData[]>(() => [
     align: "center"
   },
   {
-    title: t("searchTable.columns.isDelete"),
-    dataIndex: "isDelete",
-    slotName: "isDelete",
-    align: "center",
-    valueEnum: {
-      0: { text: '正常'},
-      1: { text: '删除'},
-    },
-  },
-  {
     title: t("searchTable.columns.operations"),
     dataIndex: "operations",
     slotName: "operations",
     align: "center"
-  }
+  },
 ]);
-const userRoleOptions = computed<SelectOptionData[]>(() => [
+const requiresAuthOptions = computed<SelectOptionData[]>(() => [
   {
-    label: t("searchTable.form.userRole.admin"),
-    value: "admin"
+    label: t("searchTable.form.requiresAuth.true"),
+    value: 1
   },
   {
-    label: t("searchTable.form.userRole.user"),
-    value: "user"
+    label: t("searchTable.form.requiresAuth.false"),
+    value: 0
+  }
+]);
+const statusOptions = computed<SelectOptionData[]>(() => [
+  {
+    label: t("searchTable.form.status.normal"),
+    value: '0'
+  },
+  {
+    label: t("searchTable.form.status.delete"),
+    value: '1'
   }
 ]);
 // const filterTypeOptions = computed<SelectOptionData[]>(() => [
@@ -485,11 +494,11 @@ const userRoleOptions = computed<SelectOptionData[]>(() => [
 //   },
 // ]);
 const fetchData = async (
-  params: UserParams = { current: 1, pageSize: 20 }
+  params: MenuParams = { current: 1, pageSize: 20 }
 ) => {
   setLoading(true);
   try {
-    const { data } = await queryUserList(params);
+    const { data } = await queryMenuList(params);
     total.value = data.total;
     renderData.value = data.records;
     pagination.current = params.current;
@@ -505,7 +514,7 @@ const search = () => {
   fetchData({
     ...basePagination,
     ...queryParams.value
-  } as unknown as UserParams);
+  } as unknown as MenuParams);
 };
 const onPageChange = (current: number) => {
   fetchData({ ...basePagination, current });

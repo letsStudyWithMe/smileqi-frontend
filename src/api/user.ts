@@ -67,10 +67,6 @@ export function addUserInfo(data: User) {
   return axios.post<BooleanRes>('/sysuser/register', data);
 }
 
-export function getMenuList() {
-  return axios.get<RouteRecordNormalized[]>('/sysmenu/showSysMenu');
-}
-
 // export function queryUserList(params: UserParams) {
 //   return axios.get<UserListRes>('/list/policy', {
 //     params,
