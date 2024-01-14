@@ -54,5 +54,5 @@ export function getMenuList() {
 }
 
 export function queryMenuList(params: MenuParams) {
-  return axios.post<MenuListRes>('/sysmenu/list/page', params);
+  return axios.post<MenuListRes>('/sysmenu/list/page/menuTree', params);
 }

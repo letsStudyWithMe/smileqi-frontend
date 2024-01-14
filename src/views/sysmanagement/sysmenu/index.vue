@@ -139,9 +139,9 @@
         :pagination="pagination"
         :columns="(cloneColumns as TableColumnData[])"
         :data="renderData"
-        :expandable="expandedRowRender(record)"
         :bordered="true"
         :size="size"
+        :show-empty-tree="true"
         @page-change="onPageChange"
       >
         <template #index="{ rowIndex }">
@@ -164,6 +164,7 @@
       :visible=showModel
       @ok="handleAddOrUpdate(formModel)"
       @cancel="handleCancel"
+      width="700px"
       title-align="start">
       <a-form
         :model="formModel"
@@ -221,10 +222,14 @@
             :placeholder="$t('searchTable.form.icon.placeholder')"
           />
         </a-form-item>
-        <a-form-item field="status" :label="$t('searchTable.form.status')">
-          <a-input
+        <a-form-item
+          field="status"
+          :label="$t('searchTable.form.status')"
+        >
+          <a-select
             v-model="formModel.status"
-            :placeholder="$t('searchTable.form.status.placeholder')"
+            :options="statusOptions"
+            :placeholder="$t('searchTable.form.selectDefault')"
           />
         </a-form-item>
       </a-form>
@@ -279,7 +284,6 @@ const cloneColumns = ref<Column[]>([]);
 const showColumns = ref<Column[]>([]);
 const total = ref<number>();
 const size = ref<SizeProps>("medium");
-
 // 新增或修改弹窗
 const showModel = ref(false);
 let isAdd = true;
@@ -360,11 +364,9 @@ const basePagination: Pagination = {
 const pagination = reactive({
   ...basePagination
 });
-const expandedRowRender = async (record: any) => {
-  if(record.key==='3'){
-    return `My Name is ${record.name}`
-  }
-};
+const expanded = reactive({
+  expandedRowKeys: []
+});
 const densityList = computed(() => [
   {
     name: t("searchTable.size.mini"),
@@ -393,6 +395,11 @@ const columns = computed<TableColumnData[]>(() => [
     title: t("searchTable.columns.id"),
     dataIndex: "id",
     slotName: "id",
+    align: "center"
+  },
+  {
+    title: t("searchTable.columns.name"),
+    dataIndex: "name",
     align: "center"
   },
   {
@@ -456,11 +463,11 @@ const columns = computed<TableColumnData[]>(() => [
 const requiresAuthOptions = computed<SelectOptionData[]>(() => [
   {
     label: t("searchTable.form.requiresAuth.true"),
-    value: 1
+    value: true
   },
   {
     label: t("searchTable.form.requiresAuth.false"),
-    value: 0
+    value: false
   }
 ]);
 const statusOptions = computed<SelectOptionData[]>(() => [
