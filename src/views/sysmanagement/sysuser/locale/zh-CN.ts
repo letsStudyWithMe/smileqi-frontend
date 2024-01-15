@@ -28,7 +28,8 @@ export default {
   // model
   'searchTable.model.add.title': '新增',
   'searchTable.model.update.title': '修改',
-
+  'searchTable.form.isDelete.delete': '停用',
+  'searchTable.form.isDelete.normal': '正常',
   // columns
   'searchTable.columns.id': 'id',
   'searchTable.columns.userAccount': '账号',

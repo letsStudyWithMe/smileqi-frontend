@@ -442,6 +442,9 @@ const columns = computed<TableColumnData[]>(() => [
     dataIndex: "isDelete",
     slotName: "isDelete",
     align: "center",
+    render:(record:any)=>{
+      return record.record.isDelete===0 ? t("searchTable.form.isDelete.normal") : t("searchTable.form.isDelete.delete")
+    },
   },
   {
     title: t("searchTable.columns.operations"),

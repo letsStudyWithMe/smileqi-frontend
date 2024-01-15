@@ -435,6 +435,9 @@ const columns = computed<TableColumnData[]>(() => [
     dataIndex: "status",
     slotName: "status",
     align: "center",
+    render:(record:any)=>{
+      return record.record.status==='0' ? t("searchTable.form.isDelete.normal") : t("searchTable.form.isDelete.delete")
+    },
   },
   {
     title: t("searchTable.columns.perms"),
@@ -480,26 +483,7 @@ const statusOptions = computed<SelectOptionData[]>(() => [
     value: '1'
   }
 ]);
-// const filterTypeOptions = computed<SelectOptionData[]>(() => [
-//   {
-//     label: t('searchTable.form.filterType.artificial'),
-//     value: 'artificial',
-//   },
-//   {
-//     label: t('searchTable.form.filterType.rules'),
-//     value: 'rules',
-//   },
-// ]);
-// const statusOptions = computed<SelectOptionData[]>(() => [
-//   {
-//     label: t('searchTable.form.status.online'),
-//     value: 'online',
-//   },
-//   {
-//     label: t('searchTable.form.status.offline'),
-//     value: 'offline',
-//   },
-// ]);
+
 const fetchData = async (
   params: MenuParams = { current: 1, pageSize: 20 }
 ) => {

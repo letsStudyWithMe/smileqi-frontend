@@ -28,6 +28,8 @@ export default {
   // model
   'searchTable.model.add.title': 'Add',
   'searchTable.model.update.title': 'Update',
+  'searchTable.form.isDelete.delete': 'Stop Use',
+  'searchTable.form.isDelete.normal': 'Normal',
 
   // columns
   'searchTable.columns.id': 'Id',
