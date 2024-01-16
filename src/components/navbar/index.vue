@@ -146,8 +146,8 @@
 <!--      </li>-->
       <li>
         <a-dropdown trigger="click">
-          <a-avatar :style="{ backgroundColor: '#3370ff' }">
-            <IconUser />
+          <a-avatar :image-url = defaultAvatar>
+<!--            <IconUser />-->
           </a-avatar>
           <template #content>
 <!--            <a-doption>-->
@@ -191,15 +191,16 @@
 
 <script lang="ts" setup>
   import { computed, ref, inject } from 'vue';
-  import { Message } from '@arco-design/web-vue';
+  import {  Message } from "@arco-design/web-vue";
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import { LOCALE_OPTIONS } from '@/locale';
   import useLocale from '@/hooks/locale';
   import useUser from '@/hooks/user';
   import Menu from '@/components/menu/index.vue';
-  import MessageBox from '../message-box/index.vue';
+  import Avatar from '@/assets/images/img_avatar.gif'
 
+  const defaultAvatar = String(Avatar);
   const appStore = useAppStore();
   const userStore = useUserStore();
   const { logout } = useUser();

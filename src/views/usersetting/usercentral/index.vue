@@ -1,19 +1,11 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['menu.user.setting', 'menu.user.central']" />
-    <a-card :body-style="{ padding: '10px' }" :bordered="false" class="card-border-radius personal-box" :title="$t('menu.user.central')">
+    <a-card :bordered="false" :title="$t('menu.user.central')">
+      <div class="box-wrapper">
       <div class="info-wrapper">
         <div class="avatar-wrapper">
-          <div
-            class="avatar"
-            :class="{ 'avatar-touch': touched, 'avatar-end': uploaded }"
-            @mouseenter="avatarTouchStart"
-          >
-            <img :src="avatar" />
-          </div>
-          <div class="flex items-center justify-center camera-layer" @click="uploadAvatar">
-            <icon-camera style="color: #fff; font-size: 30px" />
-          </div>
+          <img :src="avatar" />
         </div>
         <div class="text-xl">
           {{ nickName }}
@@ -47,11 +39,56 @@
           </a-space>
         </div>
       </div>
+      </div>
     </a-card>
   </div>
 </template>
 
-
+<!--<template>-->
+<!--  <div class="container">-->
+<!--    <Breadcrumb :items="['menu.user.setting', 'menu.user.central']" />-->
+<!--    <a-card :bordered="false" :title="$t('menu.user.central')">-->
+<!--      <div class="box-wrapper">-->
+<!--        <div class="info-wrapper">-->
+<!--          <div class="avatar-wrapper">-->
+<!--            <img :src="avatar" />-->
+<!--          </div>-->
+<!--          <div class="text-xl">-->
+<!--            {{ nickName }}-->
+<!--          </div>-->
+<!--          <div class="des-wrapper">-->
+<!--            <i class="el-icon-edit"></i>-->
+<!--            冰冻三尺，非一日之寒，成大事者不拘小节。-->
+<!--          </div>-->
+<!--          <div class="text-wrapper">-->
+<!--            <div class="label"> 昵称： </div>-->
+<!--            <div class="value"> 蝴蝶飞呀飞 </div>-->
+<!--          </div>-->
+<!--          <div class="text-wrapper">-->
+<!--            <div class="label"> 性别： </div>-->
+<!--            <div class="value"> 男 </div>-->
+<!--          </div>-->
+<!--          <div class="text-wrapper">-->
+<!--            <div class="label"> 生日： </div>-->
+<!--            <div class="value"> 2021-1-1 </div>-->
+<!--          </div>-->
+<!--          <div class="text-wrapper">-->
+<!--            <div class="label"> 部门： </div>-->
+<!--            <div class="value"> 研发部 </div>-->
+<!--          </div>-->
+<!--          <div class="mt-4">-->
+<!--            <a-space align="center" :style="{ flexWrap: 'wrap' }">-->
+<!--              <a-tag color="green" size="small">技术控</a-tag>-->
+<!--              <a-tag color="green" size="small">爱学习</a-tag>-->
+<!--              <a-tag color="green" size="small">大嘴巴</a-tag>-->
+<!--              <a-tag color="green" size="small">宅男</a-tag>-->
+<!--            </a-space>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </a-card>-->
+<!--  </div>-->
+<!--</template>-->
 
 
 <!--<template>-->
@@ -220,8 +257,6 @@ export default defineComponent({
 </script>
 <style lang="less" scoped>
 .box-wrapper {
-  .personal-box {
-    width: 30%;
     .info-wrapper {
       text-align: center;
       .avatar-wrapper {
@@ -289,7 +324,6 @@ export default defineComponent({
         margin-top: 15px;
       }
     }
-  }
   .message-wrapper {
     border-bottom: 1px solid #f5f5f5;
     padding-bottom: 10px;
