@@ -167,7 +167,7 @@
 <!--              </a-space>-->
 <!--            </a-doption>-->
             <a-doption>
-              <a-space @click="$router.push({ name: 'Setting' })">
+              <a-space @click="$router.push({ name: 'usercentral' })">
                 <icon-settings />
                 <span>
                   {{ $t('messageBox.userSettings') }}

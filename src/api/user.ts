@@ -33,6 +33,12 @@ export interface User {
   isDelete: string;
 }
 
+export interface UpdatePasswordParam {
+  userPasswordLater: string,
+  userPassword: string,
+  userPasswordCheck: string
+}
+
 export interface UserParams extends Partial<User> {
   current: number;
   pageSize: number;
@@ -67,14 +73,9 @@ export function addUserInfo(data: User) {
   return axios.post<BooleanRes>('/sysuser/register', data);
 }
 
-// export function queryUserList(params: UserParams) {
-//   return axios.get<UserListRes>('/list/policy', {
-//     params,
-//     paramsSerializer: (obj) => {
-//       return qs.stringify(obj);
-//     },
-//   });
-// }
+export function updatePasswordInfo(data: UpdatePasswordParam) {
+  return axios.post<BooleanRes>('/sysuser/updatePassword', data);
+}
 
 export function queryUserList(params: UserParams) {
   return axios.post<UserListRes>('/sysuser/list/page/vo', params);

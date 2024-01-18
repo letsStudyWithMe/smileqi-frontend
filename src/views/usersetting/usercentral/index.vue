@@ -3,170 +3,132 @@
     <Breadcrumb :items="['menu.user.setting', 'menu.user.central']" />
     <a-card :bordered="false" :title="$t('menu.user.central')">
       <div class="box-wrapper">
-      <div class="info-wrapper">
-        <div class="avatar-wrapper">
-          <img :src="avatar" />
+        <div class="info-wrapper">
+          <div class="avatar-wrapper">
+            <div class="avatar" :class="{ 'avatar-touch': touched, 'avatar-end': uploaded }">
+              <img :src="avatar" />
+            </div>
+          </div>
+          <a-card class="general-card" :title="$t('menu.user.info')">
+            <a-row>
+              <a-col :flex="1">
+                <a-form
+                  :label-col-props="{ span: 6 }"
+                  :wrapper-col-props="{ span: 18 }"
+                  label-align="left"
+                >
+                  <a-row :gutter="16">
+                    <a-col :span="8">
+                      <a-form-item
+                        field="nickName" :label="$t('suersetting.usercentral.name')"
+                      >
+                        <a-input
+                          v-model=nickName
+                          :disabled="true"
+                        />
+                      </a-form-item>
+                    </a-col>
+                    <a-col :span="8">
+                      <a-form-item field="userRole" :label="$t('suersetting.usercentral.role')">
+                        <a-input
+                          v-model="userRole"
+                          :disabled="true"
+                        />
+                      </a-form-item>
+                    </a-col>
+                  </a-row>
+                </a-form>
+              </a-col>
+            </a-row>
+          </a-card>
+          <a-divider style="margin-top: 0" />
+          <a-card class="general-card" :title="$t('menu.user.updatePassword')">
+            <a-form
+              :model="updatePasswordPar"
+              :label-col-props="{ span: 6 }"
+              :wrapper-col-props="{ span: 18 }"
+              label-align="left"
+            >
+              <a-col :span="8">
+                <a-form-item
+                  field="userPasswordLater"
+                  :label="$t('suersetting.usercentral.laterPassword')"
+                >
+                  <a-input-password
+                    v-model=updatePasswordPar.userPasswordLater
+                    :placeholder="$t('suersetting.usercentral.laterPassword.placeholder')"
+                  >
+                    <template #prefix>
+                      <icon-lock />
+                    </template>
+                  </a-input-password>
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item
+                  field="userPassword"
+                  :label="$t('suersetting.usercentral.userPassword')"
+                >
+                  <a-input-password
+                    v-model=updatePasswordPar.userPassword
+                    :placeholder="$t('suersetting.usercentral.userPassword.placeholder')"
+                  >
+                    <template #prefix>
+                      <icon-lock />
+                    </template>
+                  </a-input-password>
+                </a-form-item>
+              </a-col>
+              <a-col :span="8">
+                <a-form-item field="userPasswordCheck" :label="$t('suersetting.usercentral.checkPassword')">
+                  <a-input-password
+                    v-model="updatePasswordPar.userPasswordCheck"
+                    :placeholder="$t('suersetting.usercentral.checkPassword.placeholder')"
+                  >
+                    <template #prefix>
+                      <icon-lock />
+                    </template>
+                  </a-input-password>
+                </a-form-item>
+              </a-col>
+            </a-form>
+            <a-button type="primary" @click="updatePas(updatePasswordPar)">
+              {{ $t("menu.user.updatePassword") }}
+            </a-button>
+          </a-card>
         </div>
-        <div class="text-xl">
-          {{ nickName }}
-        </div>
-        <div class="des-wrapper">
-          <i class="el-icon-edit"></i>
-          冰冻三尺，非一日之寒，成大事者不拘小节。
-        </div>
-        <div class="text-wrapper">
-          <div class="label"> 昵称： </div>
-          <div class="value"> 蝴蝶飞呀飞 </div>
-        </div>
-        <div class="text-wrapper">
-          <div class="label"> 性别： </div>
-          <div class="value"> 男 </div>
-        </div>
-        <div class="text-wrapper">
-          <div class="label"> 生日： </div>
-          <div class="value"> 2021-1-1 </div>
-        </div>
-        <div class="text-wrapper">
-          <div class="label"> 部门： </div>
-          <div class="value"> 研发部 </div>
-        </div>
-        <div class="mt-4">
-          <a-space align="center" :style="{ flexWrap: 'wrap' }">
-            <a-tag color="green" size="small">技术控</a-tag>
-            <a-tag color="green" size="small">爱学习</a-tag>
-            <a-tag color="green" size="small">大嘴巴</a-tag>
-            <a-tag color="green" size="small">宅男</a-tag>
-          </a-space>
-        </div>
-      </div>
       </div>
     </a-card>
   </div>
 </template>
 
-<!--<template>-->
-<!--  <div class="container">-->
-<!--    <Breadcrumb :items="['menu.user.setting', 'menu.user.central']" />-->
-<!--    <a-card :bordered="false" :title="$t('menu.user.central')">-->
-<!--      <div class="box-wrapper">-->
-<!--        <div class="info-wrapper">-->
-<!--          <div class="avatar-wrapper">-->
-<!--            <img :src="avatar" />-->
-<!--          </div>-->
-<!--          <div class="text-xl">-->
-<!--            {{ nickName }}-->
-<!--          </div>-->
-<!--          <div class="des-wrapper">-->
-<!--            <i class="el-icon-edit"></i>-->
-<!--            冰冻三尺，非一日之寒，成大事者不拘小节。-->
-<!--          </div>-->
-<!--          <div class="text-wrapper">-->
-<!--            <div class="label"> 昵称： </div>-->
-<!--            <div class="value"> 蝴蝶飞呀飞 </div>-->
-<!--          </div>-->
-<!--          <div class="text-wrapper">-->
-<!--            <div class="label"> 性别： </div>-->
-<!--            <div class="value"> 男 </div>-->
-<!--          </div>-->
-<!--          <div class="text-wrapper">-->
-<!--            <div class="label"> 生日： </div>-->
-<!--            <div class="value"> 2021-1-1 </div>-->
-<!--          </div>-->
-<!--          <div class="text-wrapper">-->
-<!--            <div class="label"> 部门： </div>-->
-<!--            <div class="value"> 研发部 </div>-->
-<!--          </div>-->
-<!--          <div class="mt-4">-->
-<!--            <a-space align="center" :style="{ flexWrap: 'wrap' }">-->
-<!--              <a-tag color="green" size="small">技术控</a-tag>-->
-<!--              <a-tag color="green" size="small">爱学习</a-tag>-->
-<!--              <a-tag color="green" size="small">大嘴巴</a-tag>-->
-<!--              <a-tag color="green" size="small">宅男</a-tag>-->
-<!--            </a-space>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </a-card>-->
-<!--  </div>-->
-<!--</template>-->
-
-
-<!--<template>-->
-<!--  <div class="main-container">-->
-<!--    <div class="box-wrapper">-->
-<!--      <div class="flex">-->
-<!--        <a-card-->
-<!--          :bordered="false"-->
-<!--          class="card-border-radius personal-box"-->
-<!--          :body-style="{ padding: '10px' }"-->
-<!--        >-->
-<!-- -->
-<!--        </a-card>-->
-<!--        <a-card-->
-<!--          :bordered="false"-->
-<!--          title="待办事项"-->
-<!--          class="flex-1 card-border-radius wating-box"-->
-<!--          :body-style="{ padding: '10px' }"-->
-<!--        >-->
-<!--          <div v-for="(item, index) of watingJobs" :key="index" class="flex wating-item">-->
-<!--            <div class="flex-1">-->
-<!--              {{ item.title }}-->
-<!--            </div>-->
-<!--            <div style="width: 40px">-->
-<!--              <a-tag :color="item.status === 0 ? 'red' : 'green'" size="small">-->
-<!--                {{ item.status === 0 ? '未完成' : '已完成' }}-->
-<!--              </a-tag>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </a-card>-->
-<!--      </div>-->
-<!--      <div class="mt-2">-->
-<!--        <a-card-->
-<!--          :bordered="false"-->
-<!--          title="消息中心"-->
-<!--          class="card-border-radius flex-sub"-->
-<!--          :body-style="{ padding: '10px' }"-->
-<!--        >-->
-<!--          <template #extra>-->
-<!--            <a-button type="primary" size="mini"> 查看更多 </a-button>-->
-<!--          </template>-->
-<!--          <div-->
-<!--            v-for="(item, index) of messages"-->
-<!--            :key="index"-->
-<!--            class="flex items-center message-wrapper"-->
-<!--          >-->
-<!--            <div-->
-<!--              class="notify"-->
-<!--              :class="{ 'bg-red-500': item.status === 0, 'bg-green-500': item.status === 1 }"-->
-<!--            ></div>-->
-<!--            <div class="flex-1 ml-2">-->
-<!--              <div class="message-title">-->
-<!--                {{ item.title }}-->
-<!--              </div>-->
-<!--              <div class="content">-->
-<!--                {{ item.content }}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </a-card>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</template>-->
-
 <script lang="ts">
 import useUserStore from '@/store/modules/user'
 import { defineComponent, ref } from 'vue'
+import { useI18n } from "vue-i18n";
 import Avatar from '@/assets/images/img_avatar.gif'
+import { updatePasswordInfo } from "@/api/user";
+import { Message } from "@arco-design/web-vue";
+import useUser from "@/hooks/user";
 
 export default defineComponent({
   name: 'Personal',
   setup() {
     const touched = ref(false)
     const uploaded = ref(false)
+    const { t } = useI18n();
+    const { logout } = useUser();
     const avatarTouchStart = () => {
       touched.value = true
     }
+    const updatePasswordParams = () => {
+      return {
+        userPasswordLater: "",
+        userPassword: "",
+        userPasswordCheck: ""
+      };
+    };
+    const updatePasswordPar = ref(updatePasswordParams());
     const defaultAvatar = Avatar
     const uploadAvatar = () => {
       uploaded.value = true
@@ -175,82 +137,41 @@ export default defineComponent({
         uploaded.value = false
       }, 1000)
     }
+    const updatePas = async (params:any) => {
+      console.log(params)
+      if (params.userPassword !== params.userPasswordCheck){
+        Message.error({
+          content: t("suersetting.usercentral.checkPassword.same"),
+          duration: 5 * 1000,
+        });
+        return;
+      }
+      let res = {} as any;
+      res = await updatePasswordInfo(params);
+      if (res.code !== 0) {
+        Message.error({
+          content: res.message,
+          duration: 5 * 1000,
+        });
+      } else {
+        Message.success({
+          content: "SUCCESS",
+          duration: 5 * 1000,
+        });
+      }
+      logout();
+    };
     const userStore = useUserStore()
     return {
       touched,
       uploaded,
-      messages: [
-        {
-          title: '重要通知：今天要加班，一堆bug等着修改，请全体家人们注意',
-          content:
-            '为了配合市场家人们努力开单，从今天开始，技术部及教研老师们要努力加班，全力配合市场的家人们多多开单。谢谢大家的支持与配合。',
-          status: 0, // 0未读 1已读
-        },
-        {
-          title: '重要通知：今天要加班，一堆bug等着修改，请全体家人们注意',
-          content:
-            '为了配合市场家人们努力开单，从今天开始，技术部及教研老师们要努力加班，全力配合市场的家人们多多开单。谢谢大家的支持与配合。',
-          status: 1, // 0未读 1已读
-        },
-        {
-          title: '重要通知：今天要加班，一堆bug等着修改，请全体家人们注意',
-          content:
-            '为了配合市场家人们努力开单，从今天开始，技术部及教研老师们要努力加班，全力配合市场的家人们多多开单。谢谢大家的支持与配合。',
-          status: 1, // 0未读 1已读
-        },
-        {
-          title: '重要通知：今天要加班，一堆bug等着修改，请全体家人们注意',
-          content:
-            '为了配合市场家人们努力开单，从今天开始，技术部及教研老师们要努力加班，全力配合市场的家人们多多开单。谢谢大家的支持与配合。',
-          status: 1, // 0未读 1已读
-        },
-      ],
-      watingJobs: [
-        {
-          title: '和朋友同事一起玩王者，吃鸡',
-          status: 0, // 0未完成，1已完成
-        },
-        {
-          title: '下班写今日总结',
-          status: 1, // 0未完成，1已完成
-        },
-        {
-          title: '中午打卡，吃饭，下去买一瓶快乐水',
-          status: 0, // 0未完成，1已完成
-        },
-        {
-          title: '给项目经理演示项目成果，汇报项目进度，查看同事新提交的bug',
-          status: 1, // 0未完成，1已完成
-        },
-        {
-          title: '上班打卡',
-          status: 0, // 0未完成，1已完成
-        },
-        {
-          title: '和朋友同事一起玩王者，吃鸡',
-          status: 0, // 0未完成，1已完成
-        },
-        {
-          title: '下班写今日总结',
-          status: 1, // 0未完成，1已完成
-        },
-        {
-          title: '中午打卡，吃饭，下去买一瓶快乐水',
-          status: 0, // 0未完成，1已完成
-        },
-        {
-          title: '给项目经理演示项目成果，汇报项目进度，查看同事新提交的bug',
-          status: 1, // 0未完成，1已完成
-        },
-        {
-          title: '上班打卡',
-          status: 0, // 0未完成，1已完成
-        },
-      ],
       avatar: defaultAvatar,
       nickName: userStore.userName,
+      userRole: userStore.userRole,
       avatarTouchStart,
       uploadAvatar,
+      updatePasswordPar,
+      updatePas,
     }
   },
 })
@@ -279,7 +200,7 @@ export default defineComponent({
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            border: 2px solid rgb(245, 241, 7);
+            border: 2px solid rgb(0, 255, 255);
           }
         }
         .avatar-touch {
@@ -305,18 +226,18 @@ export default defineComponent({
         padding: 15px;
       }
       .text-wrapper {
-        font-size: 0.8rem;
+        font-size: 1.0rem;
         margin-top: 20px;
         width: 50%;
         margin: 0 auto;
         .label {
           display: inline-block;
-          width: 40%;
+          width: 50%;
           text-align: right;
         }
         .value {
           display: inline-block;
-          width: 60%;
+          width: 50%;
           text-align: left;
         }
       }
